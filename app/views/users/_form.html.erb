@@ -1,0 +1,42 @@
+<%= form_for(@user) do |f| %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+      <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :email %><br>
+    <%= f.text_field :email %>
+  </div>
+  <%= f.fields_for :address do |ad|%>
+    <% Date::DAYNAMES.each do |day| %>
+      <% unless f.object.new_record?
+          open_hours = f.object.address[day]["open"] 
+          close_hours = f.object.address[day]["close"] 
+       end%>
+      <div class="field">
+        <%= ad.label day.to_sym %>  
+        <%= ad.fields_for day.to_sym do |fday|%>
+            <%= fday.label :open %>   
+            <%= fday.text_field :open, value: open_hours%>
+            <%= fday.label :close %>  
+            <%= fday.text_field :close, value: close_hours%>
+        <%end%>
+      </div>      
+    <%end%>
+  <%end%>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

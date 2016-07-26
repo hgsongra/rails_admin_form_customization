@@ -1,0 +1,26 @@
+<%= form.fields_for :address do |ad|%>
+	<% Date::DAYNAMES.each do |day| %>
+		<% unless form.object.new_record?
+    	open_hours = form.object.address[day]["open"] 
+      close_hours = form.object.address[day]["close"] 
+		end%>
+		<div class="row">
+			<div class="col-md-2">
+		    <label class="col-sm-1 control-label" for="user_email"><%= ad.label day %></label>
+		  </div>
+		  <%= ad.fields_for day.to_sym do |fday|%>
+			  <div class="col-md-3">
+			    <%= fday.text_field :open, value: open_hours, class: "form-control"%>
+			  </div>
+			  <div class="col-md-3">
+			  	<div class="form-inline">
+			    	<div class="input-group">
+			    		<%= fday.text_field :close, value: close_hours, class: "form-control"%>
+			    		<span class="help-block"></span>
+			    	</div>
+			    </div>
+			  </div>
+			<%end%>
+	  </div>
+	<%end%>
+<%end%>
